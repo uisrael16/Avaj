@@ -1,72 +1,99 @@
-import Uisrael;
-
 import java.io.*;
-import java.lang.String;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import Aircrafts.AircraftFactory;
+import Aircrafts.WeatherTower;
+//import Interface.Flyable;
+
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
+//import Aircrafts.Aircraft;
+// import Aircrafts.AircraftFactory;
 
 public class Main {
-    public static int repeatSimulation;
-    public static String lineReader;
-    public static int lineArgs;
-    private static BufferedReader target;
+    // private static final String weatherTower = null;
 
-    static WeatherTower weatherTower = new WeatherTower();
-
-    static void file_validation() throws IOException {
-        try {
-            lineArgs = 1;
-            while ((lineReader = target.readLine()) != null) {
-                if (lineArgs == 1)
-                {
-                    try {
-                        repeatSimulation = Integer.parseInt(lineReader);
-                        if (repeatSimulation < 0){
-                            System.out.println("Error: first line of scenario file must be a POSITIVE integer.");
-                            System.exit(0);
-                        }
-                    } catch (NumberFormatException nfe) {System.out.println("Error: first line of scenario file is expecting 1 parameter."); System.exit(0);}
-                }else {
-                    String[] array;
-                    array = lineReader.split(" ");
-                    if (array.length == 1 && array[0].isEmpty())
-                        continue;
-                    if (array.length != 5) {
-                        System.out.println("Error: Each line after line 1 on scenario file requires 5 parameters");
-                        System.exit(0);
-                    }else {
-                        try {
-                            AircraftFactory aircraftFactory = new AircraftFactory();
-                            aircraftFactory.newAircraft(array[0], array[1], Integer.parseInt(array[2]), Integer.parseInt(array[3]), Integer.parseInt(array[4])).registerTower(weatherTower);
-                        } catch (NumberFormatException nfe) {
-                            System.out.println("Error: Scenario file should follow this format <String> <String> <Int> <Int> <Int>");
-                            System.exit(0);
-                        }
-                    }
-                }
-                lineArgs++;
-            }
-        }catch (NullPointerException npe){System.out.println("Error: Could not find and read file"); System.exit(0);}
-        WeatherProvider weatherProvider = WeatherProvider.getProvider();
-        while (repeatSimulation > 0)
-        {
-            weatherTower.changeWeather();
-            repeatSimulation--;
-        }
-    }
-
-    static void file_handler(String FileName) throws IOException {
-        try {
-            target = new BufferedReader(new FileReader(FileName));
-        } catch (FileNotFoundException e) {System.out.println("Error: An error occurred trying to read a file."); System.exit(0);}
-        file_validation();
-
-    }
+   // private static final Object WeatherTower = null;
 
     public static void main(String[] args) throws IOException {
+
         if (args.length == 1) {
-            file_handler(args[0]);
-        } else{
-            System.out.println("Error: Only one argument expected");
-            System.exit(0);}
-        return;
+            try {
+                File myfile = new File(args[0]);
+                Scanner arg = new Scanner(myfile);
+                ArrayList<String> data = new ArrayList<String>();
+                int i = 0;
+                while (arg.hasNextLine()) {
+                    data.add(arg.nextLine());
+                    // System.out.println(data.get(i++));
+
+                }
+                arg.close();
+
+                try {
+                    PrintWriter information = new PrintWriter(new FileWriter("simulation.txt", true), true);
+                    String Message = " Baloon B2 1 8 77 ";
+                    information.println(Message);
+                    information.close();
+                } catch (NumberFormatException ex) {
+                    System.err.println("Invalid string in argumment");
+                }
+
+                if (data.get(0) != null) {
+                    int index = Integer.parseInt(data.get(0));
+                    if (index < 0) {
+                        System.err.println("incorrect number " + index + " number cant be a Negetive");
+                        System.exit(1);
+                    }
+
+                    // try {
+                    // data.get(0);
+                    // index = Integer.parseInt(data.get(0));
+
+                    // } catch (NumberFormatException e) {
+
+                }
+                {
+                    i = 1;
+                    WeatherTower weatherTower = new WeatherTower();
+                    while (i < data.size()) {
+
+                        String line[] = data.get(i).split("\\s+");
+                        try {
+                            //System.out.println(line[0]);
+
+                            AircraftFactory.newAircraft(line[0], line[1], Integer.parseInt(line[2]), Integer.parseInt(line[3]), Integer.parseInt(line[4])).registerTower(weatherTower);
+                  
+                            // Flyable flyable = AircraftFactory.newAircraft((line[0]), (line[1]),
+                            //          Integer.parseInt(line[2]), Integer.parseInt(line[3]), Integer.parseInt(line[4])))
+                            //          weatherTower.registerTower(WeatherTower);
+                        } catch (Exception e) {
+                            System.out.println("couldn't get the coordinates");
+                            System.exit(1);
+                        }
+
+                        if (line.length != 5) {
+                            System.err.println("Params must be 5 ");
+                            System.exit(1);
+                        }
+                        
+                        //System.out.println(line[2]);
+                        i++;
+                           
+                    } 
+                    weatherTower.changeWeather();
+                    weatherTower.changeWeather();
+                }
+                
+            
+            } catch (FileNotFoundException e) {
+                System.err.println("Invalid File");
+                e.printStackTrace();
+            }
+
+        } else
+            System.err.println("No Param");
     }
 }
