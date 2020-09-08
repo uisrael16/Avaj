@@ -10,7 +10,7 @@ public abstract class AircraftFactory {
         if (type.toLowerCase().equals("baloon")){
             return new Baloon(name, coordinates);
         }
-        else if (type.toLowerCase().equals("jetplane"))
+        else if (type.toLowerCase().equalsIgnoreCase("jetPlane"))
             return new JetPlane(name, coordinates);
 
         else if (type.toLowerCase().equals("helicopter"))
