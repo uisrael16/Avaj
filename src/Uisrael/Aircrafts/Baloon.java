@@ -2,6 +2,7 @@ package Aircrafts;
 
 import Interface.Flyable;
 
+
 public class Baloon extends Aircraft implements Flyable {
     
     private WeatherTower weatherTower;
@@ -12,28 +13,24 @@ public class Baloon extends Aircraft implements Flyable {
     
     public void updateConditions() {
         String weather = this.weatherTower.getWeather(coordinates);
-        //System.out.println("Current: " + weather);
-        System.out.println("Tower say: Baloon# " + this.name + "(" + id +") registered to weather tower.");
-        
-
-
-
        
         if (weather.equalsIgnoreCase("SUN")){
             this.coordinates = new Coordinates(coordinates.getLongitude()  + 2, coordinates.getLatitude() + 0, coordinates.getHeight() + 4);
-             System.out.println("Baloon# " + this.name +"("+ id +") Hello out there in this beautiful Sunny day");
+            WriteToFile.writeToFile("Baloon# " + this.name + "(" + this.id  +")" + "Hello out there in this beautiful Sunny day");
         }
+
         else if (weather.equalsIgnoreCase("RAIN")){
-            this.coordinates = new Coordinates(coordinates.getLongitude()  + 0, coordinates.getLatitude() + 0, coordinates.getHeight() - 5);
-            System.out.println("Baloon# " + this.name +"("+ id +") Get your Rain suite ready... its raining out there!!!");
+            this.coordinates = new Coordinates(coordinates.getLongitude()  + 0, coordinates.getLatitude() + 5, coordinates.getHeight() - 5);
+            WriteToFile.writeToFile("Baloon# " + this.name + "(" + this.id  +")" + " Get your Rain suite ready... its raining out there!!!");
         }
+
         else if (weather.equalsIgnoreCase("FOG")){
             this.coordinates = new Coordinates(coordinates.getLongitude()  + 0, coordinates.getLatitude() + 0, coordinates.getHeight() - 3);
-            System.out.println("Baloon# " + this.name +"("+ id +")  path is unclear... look out for Fog");
+             WriteToFile.writeToFile("Baloon# " + this.name + "(" + this.id  +")" + " path is unclear... look out for Fog");
         }
         else if (weather.equalsIgnoreCase("SNOW")){
             this.coordinates = new Coordinates(coordinates.getLongitude()  + 0, coordinates.getLatitude() + 0, coordinates.getHeight() - 15);
-            System.out.println("Baloon# " + this.name +"("+ id +")  we will freeze to death!!!");
+             WriteToFile.writeToFile("Baloon# " + this.name + "(" + this.id  +")" + " we will freeze to death!!!");
         }
         if (this.coordinates.getHeight() < 1)
         {
@@ -44,13 +41,7 @@ public class Baloon extends Aircraft implements Flyable {
     public void registerTower(WeatherTower weatherTower) {
         this.weatherTower = weatherTower;
         weatherTower.register(this);
-     //   System.out.println("Registered"  + this.name + this.id);
+         WriteToFile.writeToFile("Tower says : baloon# " + this.name + "(" + this.id + ")" + "Registered to the tow ");
      
     }
-
-	// @Override
-	// public void registerTower(Object weatherTower) {
-	// 	// TODO Auto-generated method stub
-
-	// }
 }

@@ -1,13 +1,12 @@
 package Aircrafts;
 
-//import java.io.IOException;
 import java.util.ArrayList;
-//import java.util.Observable;
 
 import Interface.Flyable;
 
 public abstract class Tower {
     private ArrayList<Flyable> observers = new ArrayList<>();
+    
 
     public void register(Flyable flyable){
         observers.add(flyable);
@@ -24,7 +23,6 @@ public abstract class Tower {
     protected void conditionsChanged(){
         for (int i = 0; i < observers.size(); i++){
             observers.get(i).updateConditions();
-            //System.out.println("change");
         }
     }
 }
